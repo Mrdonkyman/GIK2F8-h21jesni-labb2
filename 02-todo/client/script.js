@@ -41,6 +41,7 @@ const todoListElement = document.getElementById('todoList');
 let titleValid = true;
 let descriptionValid = true;
 let dueDateValid = true;
+let completed = true;
 
 /* Här skapas en instans av api-klassen som finns i filen Api.js. 
 Där skrevs en konstruktor, som skulle ta emot en url. 
@@ -146,7 +147,9 @@ function saveTask() {
     title: todoForm.title.value,
     description: todoForm.description.value,
     dueDate: todoForm.dueDate.value,
-    completed: false
+    id1: getElementById("id" + id),
+    id2: getElementById("child"+ id),
+    completed: true
   };
   /* Ett objekt finns nu som har egenskaper motsvarande hur vi vill att uppgiften ska sparas ner på servern, med tillhörande värden från formulärets fält. */
 
@@ -167,7 +170,6 @@ function saveTask() {
     }
   });
 }
-
 /* En funktion som ansvarar för att skriva ut todo-listan i ett ul-element. */
 function renderList() {
   /* Logg som visar att vi hamnat i render-funktionen */
@@ -244,11 +246,14 @@ function renderTask({ id, title, description, dueDate }) {
   /***********************Labb 2 ***********************/
   /* I ovanstående template-sträng skulle det vara lämpligt att sätta en checkbox, eller ett annat element som någon kan klicka på för att markera en uppgift som färdig. Det elementet bör, likt knappen för delete, också lyssna efter ett event (om du använder en checkbox, kolla på exempelvis w3schools vilket element som triggas hos en checkbox när dess värde förändras.). Skapa en eventlyssnare till det event du finner lämpligt. Funktionen behöver nog ta emot ett id, så den vet vilken uppgift som ska markeras som färdig. Det skulle kunna vara ett checkbox-element som har attributet on[event]="updateTask(id)". */
   /***********************Labb 2 ***********************/
-
+  html += `
+    <div id="id${id}" class="box-border my-2 mr-2 h-8 w-8 border-4 border-black" onclick="markDone(${id})">
+      <div id="child${id}" class="m-1 h-4 w-4 border-3 bg-black"></div>
+    </div>
+  `;
   /* html-variabeln returneras ur funktionen och kommer att vara den som sätts som andra argument i todoListElement.insertAdjacentHTML("beforeend", renderTask(task)) */
   return html;
 }
-
 /* Funktion för att ta bort uppgift. Denna funktion är kopplad som eventlyssnare i HTML-koden som genereras i renderTask */
 function deleteTask(id) {
   /* Det id som skickas med till deleteTask är taget från respektive uppgift. Eftersom renderTask körs en gång för varje uppgift, och varje gång innehåller en unik egenskap och dess uppgifter, kommer också ett unikt id vara kopplat till respektive uppgift i HTML-listan. Det är det id:t som skickas in hit till deleteTasks. */
@@ -262,6 +267,22 @@ function deleteTask(id) {
   });
 }
 
+function markDone(id) {
+  if (completed == true) {
+    completed = false;
+    let e = document.getElementById("id" + id);
+    let e1 = document.getElementById("child" + id);
+    e.classList.replace("border-black", "border-lime-500");
+    e1.classList.replace("bg-black", "bg-lime-500");
+  }
+  else {
+    completed = true;
+    let e = document.getElementById("id" + id);
+    let e1 = document.getElementById("child" + id);
+    e.classList.replace("border-lime-500", "border-black");
+    e1.classList.replace("bg-lime-500", "bg-black");
+  }
+}
 /***********************Labb 2 ***********************/
 /* Här skulle det vara lämpligt att skriva den funktion som angivits som eventlyssnare för när någon markerar en uppgift som färdig. Jag pratar alltså om den eventlyssnare som angavs i templatesträngen i renderTask. Det kan t.ex. heta updateTask. 
   
