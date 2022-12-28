@@ -147,8 +147,6 @@ function saveTask() {
     title: todoForm.title.value,
     description: todoForm.description.value,
     dueDate: todoForm.dueDate.value,
-    id1: getElementById("id" + id),
-    id2: getElementById("child"+ id),
     completed: true
   };
   /* Ett objekt finns nu som har egenskaper motsvarande hur vi vill att uppgiften ska sparas ner på servern, med tillhörande värden från formulärets fält. */
@@ -201,6 +199,8 @@ function renderList() {
 
         /* Denna kod körs alltså en gång per element i arrayen tasks, dvs. en  gång för varje uppgiftsobjekt i listan. */
         todoListElement.insertAdjacentHTML('beforeend', renderTask(task));
+        button = document.getElementById("id" + task.id);
+        button.addEventListener('click', (e) => saveButtonAPI(e));
       });
     }
   });
@@ -266,7 +266,6 @@ function deleteTask(id) {
     /* Notera att parametern result används aldrig i denna funktion. Vi skickar inte tillbaka någon data från servern vid DELETE-förfrågningar, men denna funktion körs när hela anropet är färdigt så det är fortfarande ett bra ställe att rendera om listan, eftersom vi här i callbackfunktionen till then() vet att den asynkrona funktionen remove har körts färdigt. */
   });
 }
-
 function markDone(id) {
   if (completed == true) {
     completed = false;
@@ -302,6 +301,27 @@ Om du hittar något annat sätt som funkar för dig, använd för all del det, s
 /* Anropet till api.update ska följas av then(). then() behöver, som bör vara bekant vid det här laget, en callbackfunktion som ska hantera det som kommer tillbaka från servern via vår api-klass. Inuti den funktionen bör listan med uppgifter renderas på nytt, så att den nyligen gjorda förändringen syns. */
 
 /***********************Labb 2 ***********************/
-
+function saveButtonAPI() {
+  console.log(button);
+}
+function callButtonAPI() {
+  renderButtonUpdate();
+}
+function renderButtonUpdate(ids, complete) {
+  if (complete == true) {
+    complete = false;
+    let e = document.getElementById("id" + ids);
+    let e1 = document.getElementById("child" + ids);
+    e.classList.replace("border-black", "border-lime-500");
+    e1.classList.replace("bg-black", "bg-lime-500");
+  }
+  else {
+    complete = true;
+    let e = document.getElementById("id" + ids);
+    let e1 = document.getElementById("child" + ids);
+    e.classList.replace("border-lime-500", "border-black");
+    e1.classList.replace("bg-lime-500", "bg-black");
+  }
+}
 /* Slutligen. renderList anropas också direkt, så att listan visas när man först kommer in på webbsidan.  */
 renderList();
