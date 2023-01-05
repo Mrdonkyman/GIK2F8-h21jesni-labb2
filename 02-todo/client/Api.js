@@ -106,6 +106,22 @@ class Api {
       .catch((err) => console.log(err));
   }
 
+  update = async (id, completed) => {
+    const JSONData = JSON.stringify(completed);
+    try {
+      const response = await fetch(`${this.url}/${id}`, {
+        method: "PATCH",
+        body: JSONData,
+        headers: {
+          "content-type": "application/json",
+        },
+      });
+      const result = await response.json();
+      return result;
+    } catch (err) {
+      return err;
+    }
+  };
   /***********************Labb 2 ***********************/
   /* Här skulle det vara lämpligt att skriva en metod likt getAll, create och delete anropas från script.js när någon har markerat en uppgift som färdig. Denna metod bör ansvara för att göra en PUT eller PATCH-förfrågan till vårt backend, precis som create-metoden ansvarar för att göra ett POST-anrop. Metoden här ska alltså motsvara Update = PUT/PATCH. En sådan förfrågan görs med hjälp av fetch(). 
   
