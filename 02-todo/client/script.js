@@ -146,7 +146,7 @@ function saveTask() {
     title: todoForm.title.value,
     description: todoForm.description.value,
     dueDate: todoForm.dueDate.value,
-    completed: completed
+    completed: true,
   };
   /* Ett objekt finns nu som har egenskaper motsvarande hur vi vill att uppgiften ska sparas ner på servern, med tillhörande värden från formulärets fält. */
 
@@ -288,19 +288,14 @@ function deleteTask(id) {
     /* Notera att parametern result används aldrig i denna funktion. Vi skickar inte tillbaka någon data från servern vid DELETE-förfrågningar, men denna funktion körs när hela anropet är färdigt så det är fortfarande ett bra ställe att rendera om listan, eftersom vi här i callbackfunktionen till then() vet att den asynkrona funktionen remove har körts färdigt. */
   });
 }
-markDone = async (id, completed) => {
+function markDone (id, completed) {
   if (completed == true) {
     completed = false;
   }
   else {
     completed = true;
   }
-  try {
-    await api.update(id, completed);
-    renderList();
-  } catch (err) {
-    return err;
-  }
+    api.update(id, completed).then((result) => {renderList()});
 }
 /***********************Labb 2 ***********************/
 /* Här skulle det vara lämpligt att skriva den funktion som angivits som eventlyssnare för när någon markerar en uppgift som färdig. Jag pratar alltså om den eventlyssnare som angavs i templatesträngen i renderTask. Det kan t.ex. heta updateTask. 

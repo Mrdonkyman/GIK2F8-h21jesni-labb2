@@ -112,18 +112,17 @@ app.delete('/tasks/:id', async (req, res) => {
     res.status(500).send({ error: error.stack });
   }
 });
-app.patch("/tasks/:id", async (req, res) => {
+app.patch("/tasks", async (req, res) => {
   try {
-    const id = req.params.id;
-    const updatedData = req.body;
+    const id = req.body.id;
+    const updatedData = req.body.completed;
     const listBuffer = await fs.readFile("./tasks.json");
     const currentTasks = JSON.parse(listBuffer);
-    const updatedList = currentTasks.map((task) =>
-      task.id == id ? { ...task, ...updatedData } : task
-    );
-    await fs.writeFile("./tasks.json", JSON.stringify(updatedList));
+    const changeTask = currentTasks.filter((task) => task.id == id)
+    changeTask[0].completed = updatedData
+    await fs.writeFile("./tasks.json", JSON.stringify(currentTasks));
     res.send({
-      message: `Uppgift med id ${id} uppdaterad`,
+      currentTasks
     });
   } catch (error) {
     res.status(500).send({
