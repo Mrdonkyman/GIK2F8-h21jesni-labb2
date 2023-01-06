@@ -122,7 +122,7 @@ app.patch("/tasks", async (req, res) => {
     changeTask[0].completed = updatedData
     await fs.writeFile("./tasks.json", JSON.stringify(currentTasks));
     res.send({
-      currentTasks
+    message: `Uppgift med id ${id} uppdaterade sig`
     });
   } catch (error) {
     res.status(500).send({

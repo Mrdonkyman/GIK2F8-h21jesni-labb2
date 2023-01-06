@@ -183,7 +183,11 @@ function renderList() {
     todoListElement.innerHTML = '';
 
     /* De hämtade uppgifterna från servern via api:et getAll-funktion får heta tasks, eftersom callbackfunktionen som skickades till then() har en parameter som är döpt så. Det är tasks-parametern som är innehållet i promiset. */
-
+    tasks.sort(function(task1, task2) {
+      if(task1.dueDate > task2.dueDate) {return 1;}
+      if(task1.dueDate < task2.dueDate) {return -1;}
+      return 0;
+    })
     /* Koll om det finns någonting i tasks och om det är en array med längd större än 0 */
     if (tasks && tasks.length > 0) {
       /* Om tasks är en lista som har längd större än 0 loopas den igenom med forEach. forEach tar, likt then, en callbackfunktion. Callbackfunktionen tar emot namnet på varje enskilt element i arrayen, som i detta fall är ett objekt innehållande en uppgift.  */
